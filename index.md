@@ -281,7 +281,7 @@ scheduler完成了调度，确定了哪一辆小车运送
 
 #### 3.3.5 env_app
 
-生成模型，并且发布一条schedule_done的消息
+运行app以后，生成模型，并且发布一条schedule_done的消息
 
 ## 4. interface 说明
 
@@ -331,7 +331,33 @@ ScaraInterface(controller_name, robot_name, robot_pose, r1_pose, r2_pose):
 
 ### 4.2 ```AgvInterface```
 
+构造函数:
+```python
+AgvInterface(interface_name, car_name):
+        """
+        构造函数
+        
+        Input:  interface_name - 接口名称
+                car_name - 小车名称 
+        """
+```
 
+#### 4.2.1 ```move_to(pose)```
+        
+功能: 异步的move函数, 不会等待到达目的地
+        
+输入:  
+- pose: Pose, 目的地
+
+#### 4.2.2 ```feedback_cb(self, result)```
+
+功能: move_to在完成过程中的回调函数，可以重新编写
+
+#### 4.2.3 ```done_cb(self, state, result)```
+
+功能: move_to到达之后的回调函数，可以重新编写
+
+具体的使用例子可以看app
 
 ### 4.3 ```SchedulerInterface```
 
