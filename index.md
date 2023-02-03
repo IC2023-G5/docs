@@ -161,13 +161,14 @@ state=done时，小车充电完成，此时小车重新加入调度
 }
 ```
 
-#### 3.2.5 unload_done
+#### 3.2.5 arm_up
 
-机械臂抓起货物上升，此时卸载货物的小车可以离开进入等待区，或者运送下一个货物
+state == "up1": 机械臂抓起货物上升，此时卸载货物的小车可以离开进入等待区，或者运送下一个货物
+state == "up2": 机械臂空载上升，此时装载货物的小车可以离开```start_pose```
 
 发布者：arm
 
-订阅者：小车, scheduler
+订阅者：scheduler
 
 参数格式：
 
@@ -177,27 +178,26 @@ state=done时，小车充电完成，此时小车重新加入调度
 
 ```json
 {
-	"arm_id": "scara_robot1"
+	"arm_id": "scara_robot1",
+    "state": "up1"
 }
 ```
 
-#### 3.2.5 load_done
+#### 3.2.5 car_return
 
-机械臂空载上升，此时装载货物的小车可以离开```start_pose```
+发布者：scheduler
 
-发布者：arm
-
-订阅者：小车, scheduler
+订阅者：car
 
 参数格式：
 
-- arm_id: string, 表示机械臂id
+- car_id: string, 表示小车id
 
 消息例子:
 
 ```json
 {
-	"arm_id": "scara_robot1"
+	"car_id": "agv_car1"
 }
 ```
 
