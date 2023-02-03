@@ -137,29 +137,10 @@ scheduler完成了调度，确定了哪一辆小车运送
 ```
 
 
-#### 3.2.4 charge_require
+#### 3.2.4 charge
 
-小车需要充电，此时调度器不再调度小车
-
-发布者：小车
-
-订阅者：scheduler
-
-参数格式：
-
-- car_id: string, 表示小车id
-
-消息例子:
-
-```json
-{
-	"car_id": "scara_robot1"
-}
-```
-
-#### 3.2.5 charge_done
-
-小车充电完成，此时小车重新加入调度 
+state=require时，小车需要充电，此时调度器不再调度小车
+state=done时，小车充电完成，此时小车重新加入调度 
 
 发布者：小车
 
@@ -169,11 +150,14 @@ scheduler完成了调度，确定了哪一辆小车运送
 
 - car_id: string, 表示小车id
 
+- state: ```"done"```|```"require"```, 表示充电状态
+
 消息例子:
 
 ```json
 {
-	"car_id": "agv_car1"
+	"car_id": "agv_car1",
+    "state": "done"
 }
 ```
 
@@ -281,7 +265,7 @@ scheduler完成了调度，确定了哪一辆小车运送
 
 #### 3.3.5 env_app
 
-运行app以后，生成模型，并且发布一条schedule_done的消息
+运行app以后，生成模型，并且发布一条cargo_appear的消息
 
 ## 4. interface 说明
 
