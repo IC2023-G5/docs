@@ -66,6 +66,25 @@ id = data["id"] # 在构建消息时也可以使用 msg["id"] = id 进行构建
 
 ### 3.2 事件
 
+整体流程：
+
+|事件           |发布者      |订阅者                  |主要参数|
+|-|-|-|-|
+|cargo_appear   |env app    |scheduler              |cargo_id|
+|schedule_done  |scheduler  |car(wait->move)        |car_id, destination1, destination2|
+|car_arrive     |car        |arm(wait->move1)       |arm_id(通过destination1推算出arm_id)|
+|arm_up2        |arm        |car(wait->move)目的地选择为destination2)|arm_id|
+|car_arrive     |car        |arm(wait->move1)       |arm_id(car通过destination2推算出arm_id)|
+|arm_up2        |arm        |car(wait->move, 目的地选择为出生点，并且发布一条可用进入调度的topic)|arm_id|
+|car_return     |car        |scheduler              |car_id|
+
+1. 回到出生点后car不再发布car_arrive事件。
+2. 进入car_move状态，可能有4种情况：
+    - wait状态收到schedule_done, schedule_que中加入2个destination, 小车目的地选择为destination1
+    - wait状态收到arm_up, 此时把schedule_que中一个destination删除，schedule_que中包含了1个destination, 小车的目的地为destination2
+    - wait状态收到arm_up, 此时把schedule_que中一个destination删除，schedule_que中不包含destination，小车目的地为出生点
+    - car_move状态收到了schedule_done，此时说明schedule_que是空的，小车在返回出生点的路上，小车再次进入car_move，目的地选择为destination1
+
 #### 3.2.1 cargo_appear
 
 货物在```start_pose```出现事件(可能是摄像机捕捉到)
